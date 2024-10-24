@@ -1,27 +1,24 @@
 @ApiTesting @integration_api
-Feature: Pets
+Feature: Post Methods Pets
 
-  Scenario: Get pet By Status available
-    Given I do a GET in /pet/findByStatus?status=available
+  Scenario: POST - Create a new Pet
+    Given I do a POST in /pet using body /BodyPetStore/bodies/Post_Pet.json
+    Then I print the api Response
+    Then I save the response key id as id_petId
+    And I validate status code is 200
+    Given I do a GET in /pet/$id_petId
     Then I print the api Response
     And I validate status code is 200
 
-  Scenario: Get pet By Status sold
-    Given I do a GET in /pet/findByStatus?status=sold
+  Scenario: PUT - Change pet data
+    Given I do a PUT in /pet using body /BodyPetStore/bodies/Put_Pet.json
+      | name           | Little Pony     |
+      | customCat      | Mythical horses |
     Then I print the api Response
     And I validate status code is 200
 
-  Scenario: Get pet By Status Pending
-    Given I do a GET in /pet/findByStatus?status=pending
+  Scenario: DELETE - Wipe pet data
+    Given I do a DELETE on pet/$id_petId
     Then I print the api Response
     And I validate status code is 200
-
-  Scenario Outline: Get pet By Statuses
-    Given I do a GET in /pet/findByStatus?status=<status>
-    Then I print the api Response
-    And I validate status code is 200
-    Examples:
-      | status    |
-      | available |
-      | sold      |
-      | pending   |
+    And I assert entity message is $id_petId

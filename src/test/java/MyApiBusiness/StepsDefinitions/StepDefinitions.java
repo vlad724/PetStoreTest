@@ -6,6 +6,7 @@ import lombok.extern.java.Log;
 import org.apache.commons.lang3.StringUtils;
 import org.testng.Assert;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,5 +39,32 @@ public class StepDefinitions extends RestAssuredExtension {
     @And("^I validate status code is (.*?)$")
     public void iValidateStatusCodeIs(String code) {
         assertStatusCode(Integer.parseInt(code));
+    }
+
+    @Given("^I do a POST in (.*?) using body (.*?)$")
+    public void iDoAPost(String endpoint, String bodyPath) {
+        apiPost(endpoint, bodyPath);
+    }
+
+    @Then("^I save the response key (.*?) as (.*?)$")
+    public void iSaveTheResponseKeys(String responseKey, String newKey) {
+        saveInTestData(newKey, retrieveJsonPathResponse(responseKey));
+        //saveInTestData(newKey, retrieveResponse(responseKey));
+    }
+
+    @Given("^I do a PUT in (.*?) using body (.*?)$")
+    public void iDoAPut(String endpoint, String bodyPath, List<List<String>> table) {
+        getDataFromTable(table);
+        apiPut(endpoint, bodyPath);
+    }
+
+    @Given("^I do a DELETE on (.*?)$")
+    public void iDoADelete(String endpoint) {
+        apiDelete(endpoint);
+    }
+
+    @And("^I assert entity (.*?) is (.*?)$")
+    public void iAssertEntityMessageIs(String key, String value) {
+        assertKeyMessages(key, value);
     }
 }
