@@ -9,13 +9,13 @@ import org.junit.Test;
 @Log
 public class testConfig {
 
-    @Test
-    public void ConfigTest()  {
-        RestAssuredConfigProperties racp = new RestAssuredConfigProperties();
+  @Test
+  public void ConfigTest() {
+    RestAssuredConfigProperties racp = new RestAssuredConfigProperties();
 
-        log.info(racp.getBaseUri());
-        Assert.assertTrue("petstore is not in the string",
-                StringUtils.containsIgnoreCase(racp.getBaseUri(), "petstore.swagger"));
-
-    }
+    log.info(racp.getBaseUri());
+    Assert.assertTrue(
+        "petstore is not in the string",
+        StringUtils.containsIgnoreCase(racp.getBaseUri(), "petstore.swagger"));
+  }
 }
