@@ -15,6 +15,9 @@ Framework para pruebas API con Selenium/Cucumber Codigo Java y Maven (Udemy 2024
 
 **`mvn clean test -DsuiteFile='ApiTestPetStoreRunnerNoParams.xml'`**
 
+### Para cambiar de cliente booker o petStore
+
+#### Se debe modificar el archivo ApiTest.properties api.client = (nombre del cliente, booker o petStore) y api.version (v2 en caso de petstore o nada en caso de booker)
 
 
 
