@@ -51,6 +51,11 @@ public class StepDefinitions extends RestAssuredExtension {
     apiPut(endpoint, bodyPath);
   }
 
+  @Given("^I make a PUT in (.*?) using body (.*?)$")
+  public void iDoAPut(String endpoint, String bodyPath) {
+    apiPut(endpoint, bodyPath);
+  }
+
   @Given("^I do a DELETE on (.*?)$")
   public void iDoADelete(String endpoint) {
     apiDelete(endpoint);
@@ -64,11 +69,6 @@ public class StepDefinitions extends RestAssuredExtension {
   @And("^I assert Response values$")
   public void iAssertResponseValues(List<List<String>> table) {
     assertResponseFromTable(table);
-  }
-
-  @Given("^I make a PUT in (.*?) using body (.*?)$")
-  public void iDoAPut(String endpoint, String bodyPath) {
-    apiPut(endpoint, bodyPath);
   }
 
   @Then("^I validate the Response Schema using body (.*?)$")

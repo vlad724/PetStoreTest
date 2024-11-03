@@ -56,22 +56,6 @@ public class RestAssuredExtension extends RestAssuredConfigProperties {
       if (!isAlreadyAuthenticated) {
         bookerAuth(authBuilder);
       }
-    } else {
-      postAuth(authBuilder);
-    }
-  }
-
-  private void postAuth(RequestSpecBuilder authBuilder) {
-    try {
-      RequestSpecification requestToken = RestAssured.given().spec(authBuilder.build());
-      authToken = requestToken.post(authEndpoint);
-      if (authToken.getStatusCode() != 200) {
-        throw new SkipException("Authentication failed " + authToken.getStatusCode());
-      } else {
-        isAlreadyAuthenticated = true;
-      }
-    } catch (IllegalArgumentException | NullPointerException e) {
-      throw new SkipException("Authentication failed " + e.getMessage());
     }
   }
 
@@ -88,9 +72,9 @@ public class RestAssuredExtension extends RestAssuredConfigProperties {
         throw new SkipException("Authentication failed " + authToken.getStatusCode());
       } else {
         String token =
-            StringUtils.isNotEmpty(authToken.getBody().jsonPath().get("token"))
-                ? authToken.getBody().jsonPath().get("token")
-                : null;
+                StringUtils.isNotEmpty(authToken.getBody().jsonPath().get("token"))
+                        ? authToken.getBody().jsonPath().get("token")
+                        : null;
         if (StringUtils.isNotEmpty(token)) {
           saveInTestData("token", token);
           setBearerToken();
@@ -185,10 +169,10 @@ public class RestAssuredExtension extends RestAssuredConfigProperties {
 
   public void assertStatusCode(int code) {
     Assert.assertTrue(
-        response.statusCode() == code,
-        String.format(
-            "Status code in response is %s but expected is %s",
-            String.valueOf(response.statusCode()), code));
+            response.statusCode() == code,
+            String.format(
+                    "Status code in response is %s but expected is %s",
+                    String.valueOf(response.statusCode()), code));
   }
 
   public void assertKeyMessages(String key, String value) {
@@ -197,17 +181,17 @@ public class RestAssuredExtension extends RestAssuredConfigProperties {
 
     if (StringUtils.equals(val, "NOT NULL")) {
       Assert.assertTrue(
-          StringUtils.isNotEmpty(responseValue),
-          String.format("NOT NULL: response is %s and expected is %s", val, responseValue));
+              StringUtils.isNotEmpty(responseValue),
+              String.format("NOT NULL: response is %s and expected is %s", val, responseValue));
     } else if (StringUtils.equals(val, "IS A NUMBER")) {
       Assert.assertTrue(
-          StringUtils.isNumeric(responseValue),
-          String.format("IS A NUMBER: response is %s and expected is %s", val, responseValue));
+              StringUtils.isNumeric(responseValue),
+              String.format("IS A NUMBER: response is %s and expected is %s", val, responseValue));
     } else {
       Assert.assertTrue(
-          StringUtils.equals(responseValue, val),
-          String.format(
-              "Values does not match, response is %s and expected is %s", val, responseValue));
+              StringUtils.equals(responseValue, val),
+              String.format(
+                      "Values does not match, response is %s and expected is %s", val, responseValue));
     }
   }
 
@@ -215,33 +199,33 @@ public class RestAssuredExtension extends RestAssuredConfigProperties {
     DataTable data = createDataTable(table);
     if (data != null) {
       data.cells()
-          .forEach(
-              value -> {
-                // create variables as columns you have.
-                String key = value.get(0);
-                String val = value.get(1);
-                if (StringUtils.isNotEmpty(key)) {
-                  assertKeyMessages(key, val);
-                }
-              });
+              .forEach(
+                      value -> {
+                        // create variables as columns you have.
+                        String key = value.get(0);
+                        String val = value.get(1);
+                        if (StringUtils.isNotEmpty(key)) {
+                          assertKeyMessages(key, val);
+                        }
+                      });
     }
   }
 
   public void assertJsonSchemaValidation(String schemaFile) {
     response
-        .then()
-        .assertThat()
-        .body(matchesJsonSchema(getFileBody(schemaFile)).using(jsonSchemaFactory()));
+            .then()
+            .assertThat()
+            .body(matchesJsonSchema(getFileBody(schemaFile)).using(jsonSchemaFactory()));
   }
 
   public JsonSchemaFactory jsonSchemaFactory() {
     JsonSchemaFactory jsonSchemaFactory =
-        JsonSchemaFactory.newBuilder()
-            .setValidationConfiguration(
-                ValidationConfiguration.newBuilder()
-                    .setDefaultVersion(SchemaVersion.DRAFTV4)
-                    .freeze())
-            .freeze();
+            JsonSchemaFactory.newBuilder()
+                    .setValidationConfiguration(
+                            ValidationConfiguration.newBuilder()
+                                    .setDefaultVersion(SchemaVersion.DRAFTV4)
+                                    .freeze())
+                    .freeze();
 
     return jsonSchemaFactory;
   }
